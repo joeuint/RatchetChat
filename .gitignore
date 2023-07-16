@@ -214,6 +214,6 @@ tags
 .ionide
 
 # Databases
-*.db
+prod.db
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,vim
