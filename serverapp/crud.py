@@ -16,7 +16,7 @@ ph = PasswordHasher(
     time_cost=3,
 )
 
-def create_user(db: Session):
+def create_user(db: Session) -> tuple[str, int]:
     password = ''.join(secure_rng.choices(password_char_list, k=32))
 
     hashed_password = ph.hash(password)
