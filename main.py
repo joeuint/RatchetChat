@@ -1,13 +1,13 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request, Response, status
 
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption, PublicFormat
 
 from sqlalchemy.orm import Session
 
-from .database import SessionLocal, engine
-from . import models
-from . import crud
+from database.database import SessionLocal, engine
+from database import models
+from database import crud
 
 app = FastAPI()
 
@@ -38,3 +38,13 @@ def gen_account(db: Session = Depends(get_db)):
                 'id': user_id,
                 'password': unhashed,
             }
+
+@app.post('/startconvo/{user_id}')
+def start_convo(response: Response, user_id: str, db: Session = Depends(get_db)):
+    # TODO: Make sure to do authentication of the user
+    target_user = crud.get_user_by_id(db, user_id)
+
+    if target_user is None:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return 'User Not Found'
+
