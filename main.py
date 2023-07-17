@@ -38,9 +38,6 @@ def get_jwt(response: Response, body: dict = Body(...),  db: Session = Depends(g
     if body['user_id'] is None or body['password'] is None:
         response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
         return 'user_id or password is empty'
-    
-    print(body['user_id'])
-    print(body['password'])
 
     if crud.authenticate_user(db, body['user_id'], body['password']):
         return { 'token': jwt.generate_jwt(body['user_id']) }
