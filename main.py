@@ -35,12 +35,15 @@ def gen_keys():
 
 @app.post('/token')
 def get_jwt(response: Response, body: dict = Body(...),  db: Session = Depends(get_db)):
-    if body['user_id'] is None or body['password'] is None:
+    user_id = body.get('user_id')
+    password = body.get('password')
+
+    if user_id is None or password is None:
         response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
         return 'user_id or password is empty'
 
-    if crud.authenticate_user(db, body['user_id'], body['password']):
-        return { 'token': jwt.generate_jwt(body['user_id']) }
+    if crud.authenticate_user(db, user_id, password):
+        return { 'token': jwt.generate_jwt(user_id) }
     else:
         response.status_code = status.HTTP_403_FORBIDDEN
         return 'Incorrect Credentials'
