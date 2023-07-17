@@ -9,6 +9,7 @@ uvicorn = "*"
 cryptography = "*"
 sqlalchemy = "*"
 argon2-cffi = "*"
+pyjwt = "*"
 
 [dev-packages]
 
