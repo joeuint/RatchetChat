@@ -33,3 +33,13 @@ def create_user(db: Session) -> tuple[str, int]:
 
 def get_user_by_id(db: Session, user_id: str) -> models.User | None:
     return db.query(models.User).filter(models.User.user_id == user_id).one_or_none()
+
+def new_convo_request(db: Session, target: models.User, requester: models.User) -> None:
+    convo_request = models.ConvoRequest(
+        convo_request_id = str(uuid4()),
+        requester_id = target.user_id,
+        target_id = requester.user_id,
+    )
+
+    db.add(convo_request)
+    db.commit()
