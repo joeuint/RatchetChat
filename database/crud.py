@@ -43,3 +43,17 @@ def new_convo_request(db: Session, target: models.User, requester: models.User) 
 
     db.add(convo_request)
     db.commit()
+
+def authenticate_user(db: Session, user_id: str, password: str) -> models.User | None:
+    user = db.query(models.User).filter(models.User.user_id == user_id ).one_or_none()
+
+    if user is None:
+        print('1')
+        return None
+    try:
+        ph.verify(user.hashed_password, password)
+    except:
+        print('2')
+        return None
+
+    return user
