@@ -10,6 +10,7 @@ cryptography = "*"
 sqlalchemy = "*"
 argon2-cffi = "*"
 pyjwt = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
