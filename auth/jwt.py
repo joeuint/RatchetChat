@@ -3,10 +3,10 @@ import os
 from datetime import datetime
 import time
 
-if not os.path.exists('signingsecret.txt'):
+if not os.path.exists('./auth/signingsecret.txt'):
     raise Exception('Please create a signingsecret.txt file in the auth folder and fill it with random characters.')
 
-with open('sigingsecret.txt') as f:
+with open('./auth/signingsecret.txt') as f:
     signing_secret = f.read()
     
 
