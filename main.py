@@ -39,12 +39,11 @@ def gen_account(db: Session = Depends(get_db)):
                 'password': unhashed,
             }
 
-@app.post('/startconvo/{user_id}')
-def start_convo(response: Response, user_id: str, db: Session = Depends(get_db)):
-    # TODO: Make sure to do authentication of the user
-    target_user = crud.get_user_by_id(db, user_id)
+# @app.post('/startconvo/{user_id}')
+# def start_convo(response: Response, user_id: str, db: Session = Depends(get_db)):
+#     # TODO: Make sure to do authentication of the user
+#     target_user = crud.get_user_by_id(db, user_id)
 
-    if target_user is None:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return 'User Not Found'
-
+#     if target_user is None:
+#         response.status_code = status.HTTP_404_NOT_FOUND
+#         return 'User Not Found'
