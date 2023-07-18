@@ -37,8 +37,8 @@ def get_user_by_id(db: Session, user_id: str) -> models.User | None:
 def new_convo_request(db: Session, target: models.User, requester: models.User) -> None:
     convo_request = models.ConvoRequest(
         convo_request_id = str(uuid4()),
-        requester_id = target.user_id,
-        target_id = requester.user_id,
+        target_id = target.user_id,
+        requester_id = requester.user_id,
     )
 
     db.add(convo_request)
