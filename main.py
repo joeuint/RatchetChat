@@ -56,11 +56,19 @@ def gen_account(db: Session = Depends(get_db)):
                 'password': unhashed,
             }
 
-# @app.post('/startconvo/{user_id}')
-# def start_convo(response: Response, user_id: str, db: Session = Depends(get_db)):
-#     # TODO: Make sure to do authentication of the user
-#     target_user = crud.get_user_by_id(db, user_id)
+@app.post('/startconvo/{user_id}')
+def start_convo(response: Response, request: Request, user_id: str, db: Session = Depends(get_db)):
+    # TODO: Make sure to do authentication of the user
+    sender_user = jwt.verify_jwt(request)
 
-#     if target_user is None:
-#         response.status_code = status.HTTP_404_NOT_FOUND
-#         return 'User Not Found'
+    if sender_user is None:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return 'Auth Failed'
+
+    target_user = crud.get_user_by_id(db, user_id)
+
+    if target_user is None:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return 'User Not Found'
+    
+    crud.new_convo_request(db, target_user, sender_user)
