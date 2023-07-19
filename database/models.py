@@ -23,7 +23,6 @@ class MailBox(Base):
     __tablename__ = 'mailboxes'
     id = Column(String, primary_key=True, nullable=False)
     owner_id = Column(String, ForeignKey('users.user_id'), nullable=False)
-    messages = relationship('Message', uselist=False, backref='MailBox')
 
 class Message(Base):
     __tablename__ = 'messages'
