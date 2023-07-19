@@ -96,3 +96,10 @@ def accept_convo(convo_id: str, request: Request, response: Response, db: Sessio
     db.delete(convo_request)
 
     db.commit()
+
+# WARN: For now, messages will be sent in plain text.
+# TODO: Implement encryption using the double ratchet method
+
+@app.post('/sendmessage/{user_id}')
+def send_message(user_id: str):
+    pass
