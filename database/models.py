@@ -6,7 +6,6 @@ class User(Base):
     __tablename__ = 'users'
     user_id         = Column(String, primary_key=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    mailbox = relationship('MailBox', uselist=False, backref='User')
 
 class ConvoRequest(Base):
     __tablename__ = 'convo_requests'
@@ -30,4 +29,5 @@ class Message(Base):
     __tablename__ = 'messages'
     id = Column(String, primary_key=True, nullable=False)
     connection_id = Column(String, ForeignKey('convo_connections.connection_id'))
+    mailbox_id = Column(String, ForeignKey('mailboxes.id'))
     content = Column(String, nullable=False)
