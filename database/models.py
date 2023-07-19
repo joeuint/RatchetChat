@@ -12,3 +12,9 @@ class ConvoRequest(Base):
     convo_request_id = Column(String, primary_key=True, nullable=False)
     requester_id = Column(String, ForeignKey('users.user_id'), nullable=False)
     target_id = Column(String, ForeignKey('users.user_id'), nullable=False)
+
+class ConvoConnection(Base):
+    __tablename__ = 'convo_connections'
+    connection_id = Column(String, nullable=False, primary_key=True)
+    user1 = Column(String, ForeignKey('users.user_id'), nullable=False)
+    user2 = Column(String, ForeignKey('users.user_id'), nullable=False)

@@ -11,6 +11,7 @@ sqlalchemy = "*"
 argon2-cffi = "*"
 pyjwt = "*"
 python-dateutil = "*"
+websockets = "*"
 
 [dev-packages]
 

@@ -44,6 +44,19 @@ def new_convo_request(db: Session, target: models.User, requester: models.User) 
     db.add(convo_request)
     db.commit()
 
+def get_convo_request_by_id(db: Session, convo_request_id: str) -> models.ConvoRequest | None:
+    return db.query(models.ConvoRequest).filter(models.ConvoRequest.convo_request_id == convo_request_id).one_or_none()
+
+def new_connection(db: Session, user1: models.User, user2: models.User):
+    new_convo_connection = models.ConvoConnection(
+        connection_id = str(uuid4()),
+        user1 = user1.user_id,
+        user2 = user2.user_id,
+    )
+
+    db.add(new_convo_connection)
+    db.commit()
+
 def authenticate_user(db: Session, user_id: str, password: str) -> models.User | None:
     user = db.query(models.User).filter(models.User.user_id == user_id ).one_or_none()
 

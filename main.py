@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, Request, Response, status, Body
+from sqlalchemy import delete
 
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption, PublicFormat
@@ -58,7 +59,6 @@ def gen_account(db: Session = Depends(get_db)):
 
 @app.post('/startconvo/{user_id}')
 def start_convo(response: Response, request: Request, user_id: str, db: Session = Depends(get_db)):
-    # TODO: Make sure to do authentication of the user
     sender_user = jwt.verify_jwt(request)
 
     if sender_user is None:
@@ -72,3 +72,27 @@ def start_convo(response: Response, request: Request, user_id: str, db: Session 
         return 'User Not Found'
     
     crud.new_convo_request(db, target_user, sender_user)
+
+@app.post('/acceptconvo/{convo_id}')
+def accept_convo(convo_id: str, request: Request, response: Response, db: Session = Depends(get_db)):
+    accepter_user = jwt.verify_jwt(request)
+
+    if accepter_user is None:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return 'Auth Failed'
+
+    convo_request = crud.get_convo_request_by_id(db, convo_id)
+
+    if convo_request is None:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return 'Convo Request not found'
+
+    if accepter_user.user_id != convo_request.target_id:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return 'Not Authorized'
+
+    crud.new_connection(db, accepter_user, crud.get_user_by_id(db, convo_request.requester_id))
+
+    db.delete(convo_request)
+
+    db.commit()
