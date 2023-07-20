@@ -19,14 +19,8 @@ class ConvoConnection(Base):
     user1 = Column(String, ForeignKey('users.user_id'), nullable=False)
     user2 = Column(String, ForeignKey('users.user_id'), nullable=False)
 
-class MailBox(Base):
-    __tablename__ = 'mailboxes'
-    id = Column(String, primary_key=True, nullable=False)
-    owner_id = Column(String, ForeignKey('users.user_id'), nullable=False)
-
 class Message(Base):
     __tablename__ = 'messages'
     id = Column(String, primary_key=True, nullable=False)
     connection_id = Column(String, ForeignKey('convo_connections.connection_id'))
-    mailbox_id = Column(String, ForeignKey('mailboxes.id'))
     content = Column(String, nullable=False)

@@ -26,13 +26,7 @@ def create_user(db: Session) -> tuple[str, int]:
         hashed_password = hashed_password,
     )
 
-    new_mailbox = models.MailBox(
-        id = str(uuid4()),
-        owner_id = new_user.user_id,
-    )
-
     db.add(new_user)
-    db.add(new_mailbox)
     db.commit()
 
     return password, new_user.user_id
@@ -74,3 +68,8 @@ def authenticate_user(db: Session, user_id: str, password: str) -> models.User |
         return None
 
     return user
+
+def new_message(db: Session, connection: models.ConvoConnection):
+    new_message = models.Message(
+        
+    )
