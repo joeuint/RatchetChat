@@ -69,7 +69,12 @@ def authenticate_user(db: Session, user_id: str, password: str) -> models.User |
 
     return user
 
-def new_message(db: Session, connection: models.ConvoConnection):
+def new_message(db: Session, connection: models.ConvoConnection, message: str):
     new_message = models.Message(
-        
+        id = str(uuid4()),
+        connection_id = connection.connection_id,
+        content = message
     )
+
+    db.add(new_message)
+    db.commit()

@@ -101,5 +101,25 @@ def accept_convo(convo_id: str, request: Request, response: Response, db: Sessio
 # TODO: Implement encryption using the double ratchet method
 
 @app.post('/sendmessage/{user_id}')
-def send_message(user_id: str):
-    pass
+def send_message(user_id: str, request: Request, response: Response, db: Session = Depends(get_db), body: str = Body(media_type='text/plain')):
+    accepter_user = jwt.verify_jwt(request)
+
+    if accepter_user is None:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return 'Auth Failed'
+    
+    # Find a connection with both user_id
+    connection = db.query(models.ConvoConnection).filter(
+        models.ConvoConnection.user1 == user_id and models.ConvoConnection.user2 == accepter_user.user_id
+        or
+        models.ConvoConnection.user2 == user_id and models.ConvoConnection.user1 == accepter_user.user_id
+                                            ).one_or_none()
+    
+    if connection is None:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return 'Convo not Found'
+    
+    crud.new_message(db, connection, body)
+
+    response.status_code = status.HTTP_201_CREATED
+    
